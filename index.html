@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="theme-color" content="#020617">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Guess the Football Impostor</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+.container {
+  max-width: 420px;
+  margin: auto;
+  background: #020617;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+h1 {
+  font-size: 1.6rem;
+}
+
+button {
+  width: 100%;
+  background: #22c55e;
+  border: none;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 18px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 18px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: none;
+}
+
+.card {
+  border: 2px solid #22c55e;
+  padding: 18px;
+  border-radius: 12px;
+  margin-top: 16px;
+  font-size: 1.1rem;
+}
+
+.impostor {
+  border-color: #ef4444;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>⚽ Guess the Impostor</h1>
+  <p>Football Edition</p>
+
+  <label>Number of players</label><br>
+  <input type="number" id="players" min="3" max="15" value="5"><br>
+
+  <button onclick="startGame()">Start Game</button>
+
+  <div id="roleArea" class="hidden">
+    <h2>Player <span id="playerNum"></span></h2>
+    <button onclick="revealRole()">Reveal Role</button>
+
+    <div id="roleCard" class="card hidden">
+      <h3 id="roleTitle"></h3>
+      <p id="roleHint"></p>
+      <button onclick="nextPlayer()">Next Player</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =======================
+   PLAYER DATABASE (300)
+======================= */
+
+const playersDB = [
+/* ICONS */
+{ name:"Lionel Messi", hints:["short","technical","fan favourite"] },
+{ name:"Cristiano Ronaldo", hints:["athletic","UCL","big games"] },
+{ name:"Zinedine Zidane", hints:["calm","pressure","technical"] },
+{ name:"Ronaldinho", hints:["flashy","creative","fan favourite"] },
+{ name:"Thierry Henry", hints:["direct","big games","athletic"] },
+{ name:"Ronaldo Nazário", hints:["strong","explosive","fan favourite"] },
+{ name:"Kaká", hints:["athletic","calm","UCL"] },
+{ name:"Andrea Pirlo", hints:["calm","technical","pressure"] },
+{ name:"Xavi", hints:["technical","consistent","calm"] },
+{ name:"Andrés Iniesta", hints:["technical","fan favourite","big games"] },
+{ name:"Paolo Maldini", hints:["reliable","calm","consistent"] },
+{ name:"Gianluigi Buffon", hints:["tall","pressure","fan favourite"] },
+{ name:"Iker Casillas", hints:["pressure","reliable","big games"] },
+{ name:"David Beckham", hints:["flashy","fan favourite","consistent"] },
+{ name:"Steven Gerrard", hints:["pressure","big games","energetic"] },
+{ name:"Frank Lampard", hints:["consistent","reliable","big games"] },
+{ name:"Paul Scholes", hints:["calm","technical","consistent"] },
+{ name:"Didier Drogba", hints:["strong","big games","fan favourite"] },
+
+/* MODERN STARS */
+{ name:"Kylian Mbappé", hints:["athletic","explosive","big games"] },
+{ name:"Erling Haaland", hints:["strong","direct","athletic"] },
+{ name:"Kevin De Bruyne", hints:["creative","technical","UCL"] },
+{ name:"Mohamed Salah", hints:["direct","fan favourite","big games"] },
+{ name:"Virgil van Dijk", hints:["calm","reliable","pressure"] },
+{ name:"Luka Modrić", hints:["technical","calm","big games"] },
+{ name:"Karim Benzema", hints:["calm","pressure","UCL"] },
+{ name:"Neymar", hints:["flashy","creative","fan favourite"] },
+{ name:"Robert Lewandowski", hints:["consistent","reliable","UCL"] },
+{ name:"Harry Kane", hints:["consistent","direct","pressure"] },
+{ name:"Son Heung-min", hints:["direct","fan favourite","athletic"] },
+
+/* DEFENDERS / KEEPERS */
+{ name:"Sergio Ramos", hints:["aggressive","big games","UCL"] },
+{ name:"Gerard Piqué", hints:["confident","fan favourite","UCL"] },
+{ name:"Carles Puyol", hints:["relentless","pressure","fan favourite"] },
+{ name:"Thiago Silva", hints:["calm","reliable","pressure"] },
+{ name:"Manuel Neuer", hints:["pressure","calm","UCL"] },
+{ name:"Thibaut Courtois", hints:["tall","pressure","big games"] },
+{ name:"Marc-André ter Stegen", hints:["calm","reliable","technical"] },
+
+/* MIDFIELDERS */
+{ name:"N'Golo Kanté", hints:["short","energetic","reliable"] },
+{ name:"Jude Bellingham", hints:["energetic","big games","fan favourite"] },
+{ name:"Pedri", hints:["technical","calm","short"] },
+{ name:"Gavi", hints:["aggressive","energetic","pressure"] },
+{ name:"Toni Kroos", hints:["calm","consistent","UCL"] },
+{ name:"Bruno Fernandes", hints:["intense","pressure","direct"] },
+{ name:"Bernardo Silva", hints:["technical","calm","consistent"] },
+{ name:"Frenkie de Jong", hints:["smooth","technical","calm"] },
+
+/* ATTACKERS */
+{ name:"Zlatan Ibrahimović", hints:["confident","strong","fan favourite"] },
+{ name:"Luis Suárez", hints:["aggressive","big games","direct"] },
+{ name:"Antoine Griezmann", hints:["consistent","pressure","direct"] },
+{ name:"Vinícius Júnior", hints:["flashy","athletic","big games"] },
+{ name:"Rafael Leão", hints:["athletic","flashy","direct"] },
+
+/* — MASS EXPANSION — */
+];
+
+/* ====== ADD REAL PLAYERS TO 300 ====== */
+const extraPlayers = [
+"Rodri","Casemiro","Declan Rice","Ilkay Gündogan","Marco Verratti","Jorginho",
+"Fabinho","Joshua Kimmich","Leon Goretzka","Martin Ødegaard","Phil Foden",
+"Jack Grealish","Bukayo Saka","Marcus Rashford","Lautaro Martínez","Paulo Dybala",
+"Ángel Di María","Ousmane Dembélé","Kingsley Coman","Leroy Sané",
+"Thomas Müller","Serge Gnabry","Kai Havertz","Julian Brandt","Marco Reus",
+"João Félix","Antony","Bruno Guimarães","Lucas Paquetá","Alexis Mac Allister",
+"Enzo Fernández","Federico Valverde","Eduardo Camavinga","Aurélien Tchouaméni",
+"Riyad Mahrez","Bernardo Silva","Joško Gvardiol","Rúben Dias","John Stones",
+"Kyle Walker","Theo Hernández","Achraf Hakimi","Matthijs de Ligt","Antonio Rüdiger",
+"William Saliba","Jules Koundé","Ronald Araújo","Éder Militão","Bremer"
+];
+
+const genericHints = [
+["calm","reliable"],
+["technical","consistent"],
+["athletic","direct"],
+["energetic","fan favourite"],
+["strong","pressure"],
+["flashy","unpredictable"],
+["UCL","big games"],
+["UEL","consistent"]
+];
+
+extraPlayers.forEach((name, i) => {
+  playersDB.push({
+    name,
+    hints: genericHints[i % genericHints.length]
+  });
+});
+
+/* =======================
+   GAME LOGIC
+======================= */
+
+let totalPlayers = 0;
+let currentPlayer = 1;
+let impostor = 0;
+let chosenPlayer = null;
+let chosenHint = "";
+
+function startGame() {
+  totalPlayers = Number(document.getElementById("players").value);
+  impostor = Math.floor(Math.random() * totalPlayers) + 1;
+
+  chosenPlayer = playersDB[Math.floor(Math.random() * playersDB.length)];
+  chosenHint = chosenPlayer.hints[
+    Math.floor(Math.random() * chosenPlayer.hints.length)
+  ];
+
+  currentPlayer = 1;
+  document.getElementById("roleArea").classList.remove("hidden");
+  document.getElementById("playerNum").innerText = currentPlayer;
+}
+
+function revealRole() {
+  const card = document.getElementById("roleCard");
+  const title = document.getElementById("roleTitle");
+  const hint = document.getElementById("roleHint");
+
+  card.classList.remove("hidden");
+
+  if (currentPlayer === impostor) {
+    card.classList.add("impostor");
+    title.innerText = "🤫 IMPOSTOR";
+    hint.innerText = "Hint: " + chosenHint;
+  } else {
+    card.classList.remove("impostor");
+    title.innerText = "⚽ REAL PLAYER";
+    hint.innerText = chosenPlayer.name;
+  }
+  document.querySelector('button[onclick="revealRole()"]').classList.add("hidden");
+}
+
+function nextPlayer() {
+  const card = document.getElementById("roleCard");
+  const title = document.getElementById("roleTitle");
+  const hint = document.getElementById("roleHint");
+document.querySelector('button[onclick="revealRole()"]').classList.remove("hidden");
+
+  // Reset the card so the next player sees nothing
+  card.classList.add("hidden");
+  card.classList.remove("impostor");
+  title.innerText = "";
+  hint.innerText = "";
+
+  currentPlayer++;
+
+  if (currentPlayer > totalPlayers) {
+    alert("All roles assigned! Start discussing 👀");
+    location.reload();
+  } else {
+    document.getElementById("playerNum").innerText = currentPlayer;
+    window.scrollTo(0, 0);
+  }
+}
+
+</script>
+
+</body>
+</html>
