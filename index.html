@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="manifest" href="manifest.json">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7439897189624994"
      crossorigin="anonymous"></script>
   
 <meta name="theme-color" content="#020617">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
 <title>Guess the Football Impostor</title>
 
 <style>
@@ -85,7 +85,7 @@ input {
       <h3 id="roleTitle"></h3>
       <p id="roleHint"></p>
       <button onclick="nextPlayer()">Next Player</button>
-  <button onclick="shareGame()">📤 Share Game</button>
+      <button onclick="shareGame()">📤 Share Game</button>
       <button id="installBtn" style="display:none">
   📲 Install App
 </button>
@@ -281,26 +281,11 @@ document.querySelector('button[onclick="revealRole()"]').classList.remove("hidde
   }
 }
 
-    let deferredPrompt;
-
-  window.addEventListener("beforeinstallprompt", e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById("installBtn").style.display = "block";
-  });
-
-  document.getElementById("installBtn").addEventListener("click", () => {
-    deferredPrompt.prompt();
-  });
-
-  // service worker registration
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js");
-  }
 </script>
 
 </body>
 </html>
+
 
 
 
