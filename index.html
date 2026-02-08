@@ -211,6 +211,7 @@ function startGame() {
   document.getElementById("roleArea").classList.remove("hidden");
   document.getElementById("playerNum").innerText = currentPlayer;
 }
+<button onclick="shareGame()">📤 Share Game</button>
 
 function revealRole() {
   const card = document.getElementById("roleCard");
@@ -254,9 +255,30 @@ document.querySelector('button[onclick="revealRole()"]').classList.remove("hidde
   }
 }
 
+  function shareGame() {
+  const url = window.location.href;
+  const text = "⚽ Guess the Football Impostor – fun party game for football fans!";
+
+  // Mobile share API (best option)
+  if (navigator.share) {
+    navigator.share({
+      title: "Guess the Football Impostor",
+      text: text,
+      url: url
+    });
+  } else {
+    // WhatsApp fallback
+    const whatsappUrl =
+      "https://wa.me/?text=" +
+      encodeURIComponent(text + " " + url);
+
+    window.open(whatsappUrl, "_blank");
+  }
+}
 </script>
 
 </body>
 </html>
+
 
 
