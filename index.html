@@ -95,11 +95,107 @@ input {
     </div>
   </div>
 </div>
+<script>
+  const playersDB = [
+/* ICONS */
+{ name:"Lionel Messi", hints:["short","technical","fan favourite"] },
+{ name:"Cristiano Ronaldo", hints:["athletic","UCL","big games"] },
+{ name:"Zinedine Zidane", hints:["calm","pressure","technical"] },
+{ name:"Ronaldinho", hints:["flashy","creative","fan favourite"] },
+{ name:"Thierry Henry", hints:["direct","big games","athletic"] },
+{ name:"Ronaldo Nazário", hints:["strong","explosive","fan favourite"] },
+{ name:"Kaká", hints:["athletic","calm","UCL"] },
+{ name:"Andrea Pirlo", hints:["calm","technical","pressure"] },
+{ name:"Xavi", hints:["technical","consistent","calm"] },
+{ name:"Andrés Iniesta", hints:["technical","fan favourite","big games"] },
+{ name:"Paolo Maldini", hints:["reliable","calm","consistent"] },
+{ name:"Gianluigi Buffon", hints:["tall","pressure","fan favourite"] },
+{ name:"Iker Casillas", hints:["pressure","reliable","big games"] },
+{ name:"David Beckham", hints:["flashy","fan favourite","consistent"] },
+{ name:"Steven Gerrard", hints:["pressure","big games","energetic"] },
+{ name:"Frank Lampard", hints:["consistent","reliable","big games"] },
+{ name:"Paul Scholes", hints:["calm","technical","consistent"] },
+{ name:"Didier Drogba", hints:["strong","big games","fan favourite"] },
 
+/* MODERN STARS */
+{ name:"Kylian Mbappé", hints:["athletic","explosive","big games"] },
+{ name:"Erling Haaland", hints:["strong","direct","athletic"] },
+{ name:"Kevin De Bruyne", hints:["creative","technical","UCL"] },
+{ name:"Mohamed Salah", hints:["direct","fan favourite","big games"] },
+{ name:"Virgil van Dijk", hints:["calm","reliable","pressure"] },
+{ name:"Luka Modrić", hints:["technical","calm","big games"] },
+{ name:"Karim Benzema", hints:["calm","pressure","UCL"] },
+{ name:"Neymar", hints:["flashy","creative","fan favourite"] },
+{ name:"Robert Lewandowski", hints:["consistent","reliable","UCL"] },
+{ name:"Harry Kane", hints:["consistent","direct","pressure"] },
+{ name:"Son Heung-min", hints:["direct","fan favourite","athletic"] },
+
+/* DEFENDERS / KEEPERS */
+{ name:"Sergio Ramos", hints:["aggressive","big games","UCL"] },
+{ name:"Gerard Piqué", hints:["confident","fan favourite","UCL"] },
+{ name:"Carles Puyol", hints:["relentless","pressure","fan favourite"] },
+{ name:"Thiago Silva", hints:["calm","reliable","pressure"] },
+{ name:"Manuel Neuer", hints:["pressure","calm","UCL"] },
+{ name:"Thibaut Courtois", hints:["tall","pressure","big games"] },
+{ name:"Marc-André ter Stegen", hints:["calm","reliable","technical"] },
+
+/* MIDFIELDERS */
+{ name:"N'Golo Kanté", hints:["short","energetic","reliable"] },
+{ name:"Jude Bellingham", hints:["energetic","big games","fan favourite"] },
+{ name:"Pedri", hints:["technical","calm","short"] },
+{ name:"Gavi", hints:["aggressive","energetic","pressure"] },
+{ name:"Toni Kroos", hints:["calm","consistent","UCL"] },
+{ name:"Bruno Fernandes", hints:["intense","pressure","direct"] },
+{ name:"Bernardo Silva", hints:["technical","calm","consistent"] },
+{ name:"Frenkie de Jong", hints:["smooth","technical","calm"] },
+
+/* ATTACKERS */
+{ name:"Zlatan Ibrahimović", hints:["confident","strong","fan favourite"] },
+{ name:"Luis Suárez", hints:["aggressive","big games","direct"] },
+{ name:"Antoine Griezmann", hints:["consistent","pressure","direct"] },
+{ name:"Vinícius Júnior", hints:["flashy","athletic","big games"] },
+{ name:"Rafael Leão", hints:["athletic","flashy","direct"] },
+
+/* — MASS EXPANSION — */
+];
+
+/* ====== ADD REAL PLAYERS TO 300 ====== */
+const extraPlayers = [
+"Rodri","Casemiro","Declan Rice","Ilkay Gündogan","Marco Verratti","Jorginho",
+"Fabinho","Joshua Kimmich","Leon Goretzka","Martin Ødegaard","Phil Foden",
+"Jack Grealish","Bukayo Saka","Marcus Rashford","Lautaro Martínez","Paulo Dybala",
+"Ángel Di María","Ousmane Dembélé","Kingsley Coman","Leroy Sané",
+"Thomas Müller","Serge Gnabry","Kai Havertz","Julian Brandt","Marco Reus",
+"João Félix","Antony","Bruno Guimarães","Lucas Paquetá","Alexis Mac Allister",
+"Enzo Fernández","Federico Valverde","Eduardo Camavinga","Aurélien Tchouaméni",
+"Riyad Mahrez","Bernardo Silva","Joško Gvardiol","Rúben Dias","John Stones",
+"Kyle Walker","Theo Hernández","Achraf Hakimi","Matthijs de Ligt","Antonio Rüdiger",
+"William Saliba","Jules Koundé","Ronald Araújo","Éder Militão","Bremer"
+];
+
+const genericHints = [
+["calm","reliable"],
+["technical","consistent"],
+["athletic","direct"],
+["energetic","fan favourite"],
+["strong","pressure"],
+["flashy","unpredictable"],
+["UCL","big games"],
+["UEL","consistent"]
+];
+
+extraPlayers.forEach((name, i) => {
+  playersDB.push({
+    name,
+    hints: genericHints[i % genericHints.length]
+  });
+});
+</script>
 
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
