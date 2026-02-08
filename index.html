@@ -75,7 +75,8 @@ input {
   <input type="number" id="players" min="3" max="15" value="5"><br>
 
   <button onclick="startGame()">Start Game</button>
-
+  <button onclick="shareGame()">📤 Share Game</button>
+  
   <div id="roleArea" class="hidden">
     <h2>Player <span id="playerNum"></span></h2>
     <button onclick="revealRole()">Reveal Role</button>
@@ -211,7 +212,7 @@ function startGame() {
   document.getElementById("roleArea").classList.remove("hidden");
   document.getElementById("playerNum").innerText = currentPlayer;
 }
-<button onclick="shareGame()">📤 Share Game</button>
+
 
 function revealRole() {
   const card = document.getElementById("roleCard");
@@ -279,6 +280,7 @@ document.querySelector('button[onclick="revealRole()"]').classList.remove("hidde
 
 </body>
 </html>
+
 
 
 
