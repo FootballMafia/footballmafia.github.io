@@ -280,13 +280,28 @@ document.querySelector('button[onclick="revealRole()"]').classList.remove("hidde
     window.open(whatsappUrl, "_blank");
   }
 }
+
+    let deferredPrompt;
+
+  window.addEventListener("beforeinstallprompt", e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById("installBtn").style.display = "block";
+  });
+
+  document.getElementById("installBtn").addEventListener("click", () => {
+    deferredPrompt.prompt();
+  });
+
+  // service worker registration
   if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("sw.js");
-}
+    navigator.serviceWorker.register("sw.js");
+  }
 </script>
 
 </body>
 </html>
+
 
 
 
