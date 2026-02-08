@@ -96,7 +96,11 @@ input {
   </div>
 </div>
 <script>
-  const playersDB = [
+/* =======================
+   PLAYER DATABASE (300)
+======================= */
+
+const playersDB = [
 /* ICONS */
 { name:"Lionel Messi", hints:["short","technical","fan favourite"] },
 { name:"Cristiano Ronaldo", hints:["athletic","UCL","big games"] },
@@ -190,11 +194,101 @@ extraPlayers.forEach((name, i) => {
     hints: genericHints[i % genericHints.length]
   });
 });
+
+/* =======================
+   GAME LOGIC
+======================= */
+
+let totalPlayers = 0;
+let currentPlayer = 1;
+let impostor = 0;
+let chosenPlayer = null;
+let chosenHint = "";
+
+function startGame() {
+  totalPlayers = Number(document.getElementById("players").value);
+  impostor = Math.floor(Math.random() * totalPlayers) + 1;
+
+  chosenPlayer = playersDB[Math.floor(Math.random() * playersDB.length)];
+  chosenHint = chosenPlayer.hints[
+    Math.floor(Math.random() * chosenPlayer.hints.length)
+  ];
+
+  currentPlayer = 1;
+  document.getElementById("roleArea").classList.remove("hidden");
+  document.getElementById("playerNum").innerText = currentPlayer;
+}
+
+
+function revealRole() {
+  const card = document.getElementById("roleCard");
+  const title = document.getElementById("roleTitle");
+  const hint = document.getElementById("roleHint");
+
+  card.classList.remove("hidden");
+
+  if (currentPlayer === impostor) {
+    card.classList.add("impostor");
+    title.innerText = "🤫 IMPOSTOR";
+    hint.innerText = "Hint: " + chosenHint;
+  } else {
+    card.classList.remove("impostor");
+    title.innerText = "⚽ REAL PLAYER";
+    hint.innerText = chosenPlayer.name;
+  }
+  document.querySelector('button[onclick="revealRole()"]').classList.add("hidden");
+}
+
+function nextPlayer() {
+  const card = document.getElementById("roleCard");
+  const title = document.getElementById("roleTitle");
+  const hint = document.getElementById("roleHint");
+document.querySelector('button[onclick="revealRole()"]').classList.remove("hidden");
+
+  // Reset the card so the next player sees nothing
+  card.classList.add("hidden");
+  card.classList.remove("impostor");
+  title.innerText = "";
+  hint.innerText = "";
+
+  currentPlayer++;
+
+  if (currentPlayer > totalPlayers) {
+    alert("All roles assigned! Start discussing 👀");
+    location.reload();
+  } else {
+    document.getElementById("playerNum").innerText = currentPlayer;
+    window.scrollTo(0, 0);
+  }
+}
+
+  function shareGame() {
+  const url = window.location.href;
+  const text = "⚽ Guess the Football Impostor – fun party game for football fans!";
+
+  // Mobile share API (best option)
+  if (navigator.share) {
+    navigator.share({
+      title: "Guess the Football Impostor",
+      text: text,
+      url: url
+    });
+  } else {
+    // WhatsApp fallback
+    const whatsappUrl =
+      "https://wa.me/?text=" +
+      encodeURIComponent(text + " " + url);
+
+    window.open(whatsappUrl, "_blank");
+  }
+}
+
 </script>
 
 <script src="app.js"></script>
 </body>
 </html>
+
 
 
 
