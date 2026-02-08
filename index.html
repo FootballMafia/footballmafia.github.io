@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7439897189624994"
-     crossorigin="anonymous"></script>
-  
-<meta name="theme-color" content="#020617">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
 <title>Guess the Football Impostor</title>
 
@@ -15,49 +10,36 @@ body {
   background: #0f172a;
   color: white;
   text-align: center;
-  padding: 15px;
+  padding: 20px;
 }
-
 .container {
-  max-width: 420px;
+  max-width: 500px;
   margin: auto;
   background: #020617;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 10px;
 }
-
-h1 {
-  font-size: 1.6rem;
-}
-
 button {
-  width: 100%;
   background: #22c55e;
   border: none;
-  padding: 14px;
-  margin-top: 12px;
-  font-size: 18px;
+  padding: 10px 20px;
+  margin: 10px;
+  font-size: 16px;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 6px;
 }
-
-input {
-  width: 100%;
-  padding: 12px;
-  font-size: 18px;
-  margin-top: 8px;
-  border-radius: 8px;
-  border: none;
+button:hover {
+  background: #16a34a;
 }
-
+.hidden {
+  display: none;
+}
 .card {
   border: 2px solid #22c55e;
-  padding: 18px;
-  border-radius: 12px;
-  margin-top: 16px;
-  font-size: 1.1rem;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
 }
-
 .impostor {
   border-color: #ef4444;
 }
@@ -75,7 +57,6 @@ input {
 
   <button onclick="startGame()">Start Game</button>
 
-  
   <div id="roleArea" class="hidden">
     <h2>Player <span id="playerNum"></span></h2>
     <button onclick="revealRole()">Reveal Role</button>
@@ -84,11 +65,10 @@ input {
       <h3 id="roleTitle"></h3>
       <p id="roleHint"></p>
       <button onclick="nextPlayer()">Next Player</button>
-      <button onclick="shareGame()">📤 Share Game</button>
-      
     </div>
   </div>
 </div>
+
 <script>
 /* =======================
    PLAYER DATABASE (300)
@@ -213,7 +193,6 @@ function startGame() {
   document.getElementById("playerNum").innerText = currentPlayer;
 }
 
-
 function revealRole() {
   const card = document.getElementById("roleCard");
   const title = document.getElementById("roleTitle");
@@ -230,21 +209,10 @@ function revealRole() {
     title.innerText = "⚽ REAL PLAYER";
     hint.innerText = chosenPlayer.name;
   }
-  document.querySelector('button[onclick="revealRole()"]').classList.add("hidden");
 }
 
 function nextPlayer() {
-  const card = document.getElementById("roleCard");
-  const title = document.getElementById("roleTitle");
-  const hint = document.getElementById("roleHint");
-document.querySelector('button[onclick="revealRole()"]').classList.remove("hidden");
-
-  // Reset the card so the next player sees nothing
-  card.classList.add("hidden");
-  card.classList.remove("impostor");
-  title.innerText = "";
-  hint.innerText = "";
-
+  document.getElementById("roleCard").classList.add("hidden");
   currentPlayer++;
 
   if (currentPlayer > totalPlayers) {
@@ -252,46 +220,9 @@ document.querySelector('button[onclick="revealRole()"]').classList.remove("hidde
     location.reload();
   } else {
     document.getElementById("playerNum").innerText = currentPlayer;
-    window.scrollTo(0, 0);
   }
 }
-
-  function shareGame() {
-  const url = window.location.href;
-  const text = "⚽ Guess the Football Impostor – fun party game for football fans!";
-
-  // Mobile share API (best option)
-  if (navigator.share) {
-    navigator.share({
-      title: "Guess the Football Impostor",
-      text: text,
-      url: url
-    });
-  } else {
-    // WhatsApp fallback
-    const whatsappUrl =
-      "https://wa.me/?text=" +
-      encodeURIComponent(text + " " + url);
-
-    window.open(whatsappUrl, "_blank");
-  }
-}
-
 </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
